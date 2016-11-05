@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<!-- Rounded switch -->
+<label class="switch">
+  <input type="checkbox" onclick="changeColor(this)">
+  <div class="slider round"></div>
+</label>
+
+<label class="switch2">
+  <input type="checkbox" onclick="changeBoundaries(this)">
+  <div class="slider round"></div>
+</label>
+
+<style>
+
+svg {
+  font: 10px sans-serif;
+}
+
+.caption {
+  font-weight: bold;
+}
+
+.key path {
+  display: none;
+}
+
+.key line {
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.county-border {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .3;
+}
+
+.tract-border {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .3;
+} 
+
+h1 {
+    font:sans-serif;
+}
+    
+body {
+  font: 13px sans-serif;
+}
+    
+/**************************/
+/* http://www.w3schools.com/howto/howto_css_switch.asp */
+    
+.switch {
+  position: absolute;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  top: 100px;
+  left: 100px;
+  right: 100px;
+  bottom: 100px;
+}
+    
+.switch2 {
+  position: absolute;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  top: 150px;
+  left: 100px;
+  right: 100px;
+  bottom: 100px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+    
+    
+/****************************/   
+    
+
+</style>
+<body>
+<h1 style = "text-align:center; color:black; font:sans-serif"><bold> Texas Population Density, 2016 </bold></h1>
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script src="//d3js.org/topojson.v1.min.js"></script>
+<script>
+
+var width = 960,
+    height = 1100;
+
+var formatNumber = d3.format(",d");
+
+var projection = d3.geo.albers()
+    .center([0, 31.9686])   //center latitude of tx
+    .rotate([99.9018, 0])   //center longitude of tx
+    .parallels([50, 60])
+    .scale(3000)
+    .translate([width / 2 + 190, height / 2 - 100]);
+    
+var path = d3.geo.path()
+    .projection(projection);
+
+var color = d3.scale.threshold()
+    .domain([1, 10, 50, 100, 500, 1000, 2000, 5000])
+    .range(["#fff7ec", "#fee8c8", "#fdd49e", "#fdbb84", "#fc8d59", "#ef6548", "#d7301f", "#b30000", "#7f0000"]);
+/*
+//switch.addEventListener("click", changeColor);
+switch.onclick=function(){
+    var color = d3.scale.threshold()
+    .domain([1, 10, 50, 100, 500, 1000, 2000, 5000])
+    .range(["#000000", "#000000", "#fdd49e", "#fdbb84", "#fc8d59", "#ef6548", "#d7301f", "#b30000", "#7f0000"]);
+};
+*/
+
+var switchOnePressed = false;
+    
+function changeColor() {
+    switchOnePressed = !switchOnePressed;
+    if (switchOnePressed) {
+        color = d3.scale.threshold()
+        .domain([1, 10, 50, 100, 500, 1000, 2000, 5000])
+        .range(["#f1ffed", "#E5FFCC", "#CCFF99", "#B2FF66", "#99FF33", "#80FF00", "#66CC00", "#336600", "#336600"]);
+        console.log("goes in");
+        //console.log(color.domain());
+    }
+    else {
+        color = d3.scale.threshold()
+        .domain([1, 10, 50, 100, 500, 1000, 2000, 5000])
+        .range(["#fff7ec", "#fee8c8", "#fdd49e", "#fdbb84", "#fc8d59", "#ef6548", "#d7301f", "#b30000", "#7f0000"]);
+    }
+    test();
+}
+    
+var switchTwoPressed = false;
+    
+function changeBoundaries() {
+    switchTwoPressed = !switchTwoPressed;
+    test();
+}
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+    
+//svg.append("g").append("text").attr("x",100).attr("y",200);
+    /*svg.append("text")
+        .attr("transform", "rotate(-90)") //rotate label by 90 degrees
+        .attr("dx", "-22em")
+        .attr("dy", "-3.4em")
+        .attr("font-size", "12px")
+        .attr("font-weight", "bold")
+        .text("Trillions of US Dollars ($)");*/
+
+test();
+    
+function test() {
+    
+    var g = svg.append("g") //changes legend color after button pressed
+        .attr("class", "key")
+        .attr("transform", "translate(440,40)");
+
+    // A position encoding for the key only.
+    var x = d3.scale.linear()
+        .domain([0, 5100])
+        .range([0, 480]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom")
+        .tickSize(13)
+        .tickValues(color.domain())
+        .tickFormat(function(d) { return d >= 100 ? formatNumber(d) : null; });
+
+    g.selectAll("rect")
+        .data(color.range().map(function(d, i) {
+            console.log(x.range());
+          return {
+            x0: i ? x(color.domain()[i - 1]) : x.range()[0],
+            x1: i < color.domain().length ? x(color.domain()[i]) : x.range()[1],
+            z: d
+          };
+        }))
+      .enter().append("rect")
+        .attr("height", 8)
+        .attr("x", function(d) { return d.x0; })
+        .attr("width", function(d) { return d.x1 - d.x0; })
+        .style("fill", function(d) { return d.z; });
+        console.log('goes into rect');
+
+    g.call(xAxis).append("text")
+        .attr("class", "caption")
+        .attr("y", -6)
+        .text("Population per square mile");
+    
+    g.call(xAxis).append("text")
+        //.attr("class", "caption")
+        .attr("font-size", "12px")
+        .attr("font-weight", "bold")
+        .attr("x",-280)
+        .attr("y", 15)
+        .text("Change Colors");
+
+    g.call(xAxis).append("text")
+        //.attr("class", "caption")
+        .attr("font-size", "12px")
+        .attr("font-weight", "bold")
+        .attr("x",-280)
+        .attr("y", 65)
+        .text("Add Tract Boundaries");
+    
+    d3.json("TX-COUNTY.json", function(error, ca) {
+      if (error) throw error;
+
+      var tracts = topojson.feature(ca, ca.objects.tracts);
+        /*var tracts = topojson.feature(ca, ca.objects.counties);*/
+
+      // Clip tracts to land.
+      svg.append("defs").append("clipPath")
+          .attr("id", "clip-land")
+        .append("path")
+          .datum(topojson.feature(ca, ca.objects.counties))
+          .attr("d", path);
+
+      // Group tracts by color for faster rendering.
+      svg.append("g")
+          .attr("class", "tract")
+          .attr("clip-path", "url(#clip-land)")
+        .selectAll("path")
+          .data(d3.nest()
+            .key(function(d) { return color(d.properties.population / d.properties.area * 2.58999e6); })
+            .entries(tracts.features.filter(function(d) { return d.properties.area; })))
+        .enter().append("path")
+          .style("fill", function(d) { return d.key; })
+          .attr("d", function(d) { return path({type: "FeatureCollection", features: d.values}); });
+
+      // Draw county borders.
+      svg.append("path")
+          .datum(topojson.mesh(ca, ca.objects.counties, function(a, b) { return a !== b; }))
+          .attr("class", "county-border")
+          .attr("d", path);
+        
+    if (switchTwoPressed) {
+        svg.append("path")
+              .datum(topojson.mesh(ca, ca.objects.tracts, function(a, b) { return a !== b; }))
+              .attr("class", "tract-border")
+              .attr("d", path);
+    }
+    });
+}
+
+d3.select(self.frameElement).style("height", height + "px");
+
+</script>
