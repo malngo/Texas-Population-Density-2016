@@ -3,12 +3,12 @@
 
 <!-- Rounded switch -->
 <label class="switch">
-  <input type="checkbox" onclick="changeColor(this)">
+  <input type="checkbox" onclick="changeColor()">
   <div class="slider round"></div>
 </label>
 
 <label class="switch2">
-  <input type="checkbox" onclick="changeBoundaries(this)">
+  <input type="checkbox" onclick="changeBoundaries()"> 
   <div class="slider round"></div>
 </label>
 
@@ -138,10 +138,16 @@ input:checked + .slider:before {
 <script src="//d3js.org/topojson.v1.min.js"></script>
 <script>
 
+    
+//Mike Bostock's California density Code
+//Modified to take in Texas topojson
+//Two switches to change to show tracts or to change colors.    
+//https://bl.ocks.org/mbostock/5562380    
+    
 var width = 960,
     height = 1100;
 
-var formatNumber = d3.format(",d");
+var formatNumber = d3.format(",d"); //format day
 
 var projection = d3.geo.albers()
     .center([0, 31.9686])   //center latitude of tx
@@ -151,24 +157,21 @@ var projection = d3.geo.albers()
     .translate([width / 2 + 190, height / 2 - 100]);
     
 var path = d3.geo.path()
-    .projection(projection);
+    .projection(projection); //used to be null. Passing through Alber's projection to display
+                             // the state properly onto the page.
 
-var color = d3.scale.threshold()
+var color = d3.scale.threshold() //orginal red coloring of the states
+                                //variable for color control
     .domain([1, 10, 50, 100, 500, 1000, 2000, 5000])
     .range(["#fff7ec", "#fee8c8", "#fdd49e", "#fdbb84", "#fc8d59", "#ef6548", "#d7301f", "#b30000", "#7f0000"]);
-/*
-//switch.addEventListener("click", changeColor);
-switch.onclick=function(){
-    var color = d3.scale.threshold()
-    .domain([1, 10, 50, 100, 500, 1000, 2000, 5000])
-    .range(["#000000", "#000000", "#fdd49e", "#fdbb84", "#fc8d59", "#ef6548", "#d7301f", "#b30000", "#7f0000"]);
-};
-*/
 
-var switchOnePressed = false;
+
+var switchOnePressed = false; //boolean #1 for checking switch press
     
 function changeColor() {
-    switchOnePressed = !switchOnePressed;
+    switchOnePressed = !switchOnePressed; //if function is called, set to true, once it's called a second time
+                                          //will turn false again, toggle switch
+    //Will change red shading to green
     if (switchOnePressed) {
         color = d3.scale.threshold()
         .domain([1, 10, 50, 100, 500, 1000, 2000, 5000])
@@ -176,6 +179,7 @@ function changeColor() {
         console.log("goes in");
         //console.log(color.domain());
     }
+    //If not, original coloring
     else {
         color = d3.scale.threshold()
         .domain([1, 10, 50, 100, 500, 1000, 2000, 5000])
@@ -206,7 +210,9 @@ var svg = d3.select("body").append("svg")
 
 test();
     
-function test() {
+function test() { //put everything in a function so it can be dynamic and called multiple times
+                  //with each button press.
+                    
     
     var g = svg.append("g") //changes legend color after button pressed
         .attr("class", "key")
@@ -245,8 +251,7 @@ function test() {
         .attr("y", -6)
         .text("Population per square mile");
     
-    g.call(xAxis).append("text")
-        //.attr("class", "caption")
+    g.call(xAxis).append("text")      
         .attr("font-size", "12px")
         .attr("font-weight", "bold")
         .attr("x",-280)
@@ -254,7 +259,6 @@ function test() {
         .text("Change Colors");
 
     g.call(xAxis).append("text")
-        //.attr("class", "caption")
         .attr("font-size", "12px")
         .attr("font-weight", "bold")
         .attr("x",-280)
@@ -280,6 +284,7 @@ function test() {
           .attr("clip-path", "url(#clip-land)")
         .selectAll("path")
           .data(d3.nest()
+            //divide by 2.58999e6 to get square-miles    
             .key(function(d) { return color(d.properties.population / d.properties.area * 2.58999e6); })
             .entries(tracts.features.filter(function(d) { return d.properties.area; })))
         .enter().append("path")
@@ -302,5 +307,22 @@ function test() {
 }
 
 d3.select(self.frameElement).style("height", height + "px");
-
+    
+    
+        
+    
+    
+    
+    
+    
+//END OF Program
 </script>
+<h2>Mai Linh Ngo  <br/>
+Instructor: Suresh Lodha <br/>
+CMPS 165: Data programming for Visualization <br/>
+Fall 2016    
+</h2>    
+    
+    
+    
+    
