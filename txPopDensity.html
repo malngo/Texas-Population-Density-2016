@@ -259,7 +259,7 @@ function test() { //put everything in a function so it can be dynamic and called
         .attr("y", 65)
         .text("Add Tract Boundaries");
     
-    d3.json("TX-COUNTY.json", function(error, ca) {
+    d3.json("TX.json", function(error, ca) {
       if (error) throw error;
 
       var tracts = topojson.feature(ca, ca.objects.tracts);
