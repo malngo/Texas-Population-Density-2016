@@ -1,5 +1,8 @@
 <!DOCTYPE html>
+ 
 <meta charset="utf-8">
+<!--Mai Linh Ngo, malngo@ucsc.edu>
+
 
 <!-- Rounded switch -->
 <label class="switch">
@@ -54,7 +57,7 @@ body {
 /**************************/
 /* http://www.w3schools.com/howto/howto_css_switch.asp */
     
-.switch {
+.switch { 
   position: absolute;
   display: inline-block;
   width: 60px;
@@ -198,15 +201,6 @@ function changeBoundaries() {
 var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
-    
-//svg.append("g").append("text").attr("x",100).attr("y",200);
-    /*svg.append("text")
-        .attr("transform", "rotate(-90)") //rotate label by 90 degrees
-        .attr("dx", "-22em")
-        .attr("dy", "-3.4em")
-        .attr("font-size", "12px")
-        .attr("font-weight", "bold")
-        .text("Trillions of US Dollars ($)");*/
 
 test();
     
@@ -245,7 +239,7 @@ function test() { //put everything in a function so it can be dynamic and called
         .attr("width", function(d) { return d.x1 - d.x0; })
         .style("fill", function(d) { return d.z; });
         console.log('goes into rect');
-
+    //Legend Label
     g.call(xAxis).append("text")
         .attr("class", "caption")
         .attr("y", -6)
@@ -316,12 +310,16 @@ d3.select(self.frameElement).style("height", height + "px");
     
     
 //END OF Program
+//Collaborated with Justin Cheon on this assignment.    
 </script>
 <h2>Mai Linh Ngo  <br/>
 Instructor: Suresh Lodha <br/>
 CMPS 165: Data programming for Visualization <br/>
-Fall 2016    
+Fall 2016 <br/>
+<a href="https://malngo.github.io/Texas-Population-Density-2016/">Weblink for Visualization</a> <br/>
+<a href="https://github.com/malngo/Texas-Population-Density-2016">Weblink for Github</a>     
 </h2>    
+    
     
     
     
