@@ -6,7 +6,7 @@ Description: Texas Population Density 2016 with state and tract boundaries.
  https://github.com/malngo/Texas-Population-Density-2016 <--My Github
 
 
-Mai Linh Ngo
-malngo@ucsc.edu
-Professor Lodha
+Mai Linh Ngo <br/>
+malngo@ucsc.edu <br/>
+Professor Lodha <br/>
 Fall 2016: CMPS 165
