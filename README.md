@@ -1,5 +1,6 @@
 # Texas-Population-Density-2016
-Texas Population Density 2016 for CMPS 165 
+
+Description: Texas Population Density 2016 with state and tract boundaries.
 
 http://malngo.github.io/Texas-Population-Density-2016/ <--Link to visualization
 
