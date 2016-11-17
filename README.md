@@ -2,7 +2,7 @@
 
 Description: Texas Population Density 2016 with state and tract boundaries.
 
- http://malngo.github.io/Texas-Population-Density-2016/ <--Link to visualization
+ http://malngo.github.io/Texas-Population-Density-2016/ <--Link to visualization <br/>
  https://github.com/malngo/Texas-Population-Density-2016 <--My Github
 
 
